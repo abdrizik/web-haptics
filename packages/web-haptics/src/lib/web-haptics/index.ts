@@ -1,6 +1,6 @@
 import { HapticDebugger } from "./debug";
 import { defaultPatterns } from "./patterns";
-import type { HapticInput, WebHapticsOptions } from "./types";
+import type { HapticInput, TriggerOptions, WebHapticsOptions } from "./types";
 
 let instanceCounter = 0;
 
@@ -22,8 +22,12 @@ export class WebHaptics {
     );
   }
 
-  async trigger(input: HapticInput = defaultPatterns.lightTap): Promise<void> {
+  async trigger(
+    input: HapticInput = defaultPatterns.lightTap,
+    options?: TriggerOptions,
+  ): Promise<void> {
     const pattern = typeof input === "number" ? [input] : input;
+    const intensity = Math.max(0, Math.min(1, options?.intensity ?? 1));
 
     for (let i = 0; i < pattern.length; i++) {
       if (!Number.isFinite(pattern[i]) || pattern[i]! < 0) {
@@ -35,7 +39,7 @@ export class WebHaptics {
     }
 
     if (this.hapticDebugger) {
-      this.hapticDebugger.run(pattern);
+      this.hapticDebugger.run(pattern, intensity);
     }
 
     if (WebHaptics.isSupported()) {
@@ -44,14 +48,15 @@ export class WebHaptics {
       this.ensureDOM();
       if (!this.hapticLabel) return;
 
-      const TOGGLE_INTERVAL = 10;
+      // intensity controls toggle rate: 1.0 = every 10ms, 0.1 = every 100ms
+      const toggleInterval = Math.round(10 + 90 * (1 - intensity));
 
       for (let i = 0; i < pattern.length; i++) {
         if (i % 2 === 0) {
           const duration = pattern[i]!;
           const toggleCount = Math.max(
             1,
-            Math.floor(duration / TOGGLE_INTERVAL),
+            Math.floor(duration / toggleInterval),
           );
           const interval = duration / toggleCount;
 

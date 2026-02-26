@@ -5,5 +5,6 @@ export const defaultPatterns = {
   success: [50, 50, 50, 50, 50] as HapticPattern,
   warning: [50, 50, 50] as HapticPattern,
   error: [50, 50, 50, 50, 50] as HapticPattern,
-  impactMedium: [1000] as HapticPattern,
+  impactMedium: [10] as HapticPattern,
+  long: [2000] as HapticPattern,
 } as const;

@@ -4,7 +4,7 @@ export class HapticDebugger {
   private el: HTMLDivElement | null = null;
   private audioCtx: AudioContext | null = null;
 
-  async run(pattern: number[]): Promise<void> {
+  async run(pattern: number[], intensity = 1): Promise<void> {
     this.ensureDOM();
     if (!this.el) return;
 
@@ -27,7 +27,7 @@ export class HapticDebugger {
           gain = this.audioCtx.createGain();
           oscillator.type = "triangle";
           oscillator.frequency.value = 200;
-          gain.gain.value = 1;
+          gain.gain.value = intensity;
           oscillator.connect(gain);
           gain.connect(this.audioCtx.destination);
           oscillator.start();
