@@ -147,38 +147,11 @@ export class WebHaptics {
 
   setDebug(debug: boolean): void {
     this.debug = debug;
-    if (!this.hapticLabel) return;
-
-    if (debug) {
-      Object.assign(this.hapticLabel.style, {
-        position: "fixed",
-        bottom: "16px",
-        right: "16px",
-        zIndex: "2147483647",
-        display: "flex",
-        alignItems: "center",
-        gap: "8px",
-        padding: "8px 12px",
-        background: "rgba(0, 0, 0, 0.8)",
-        color: "#fff",
-        borderRadius: "8px",
-        fontSize: "13px",
-        fontFamily: "system-ui, sans-serif",
-        cursor: "pointer",
-        userSelect: "none",
-      });
-      const cb = this.hapticLabel.querySelector("input");
-      if (cb) Object.assign((cb as HTMLElement).style, { all: "initial", appearance: "auto" });
-    } else {
-      this.hapticLabel.style.display = "none";
-      const cb = this.hapticLabel.querySelector("input");
-      if (cb) (cb as HTMLElement).style.display = "none";
-      if (this.audioCtx) {
-        this.audioCtx.close();
-        this.audioCtx = null;
-        this.audioFilter = null;
-        this.audioGain = null;
-      }
+    if (!debug && this.audioCtx) {
+      this.audioCtx.close();
+      this.audioCtx = null;
+      this.audioFilter = null;
+      this.audioGain = null;
     }
   }
 
@@ -298,10 +271,11 @@ export class WebHaptics {
     hapticCheckbox.setAttribute("switch", "");
     hapticCheckbox.id = id;
 
+    hapticLabel.style.display = "none";
+    hapticCheckbox.style.display = "none";
+
     hapticLabel.appendChild(hapticCheckbox);
     document.body.appendChild(hapticLabel);
     this.domInitialized = true;
-
-    this.setDebug(this.debug);
   }
 }
