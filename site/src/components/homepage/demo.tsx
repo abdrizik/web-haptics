@@ -2,9 +2,9 @@ import styles from "./styles.module.scss";
 
 import { useWebHaptics } from "web-haptics/react";
 import { defaultPatterns } from "web-haptics";
-import { useRef, useState } from "react";
-import { Button } from "../button";
+import { useRef } from "react";
 import { useParticles } from "../particles";
+import { useApp } from "../../context/app";
 
 // add emoji sets
 const emojis = {
@@ -15,12 +15,12 @@ const emojis = {
 };
 
 export const Demo = () => {
+  const { debug } = useApp();
   const { trigger } = useWebHaptics({
-    debug: import.meta.env.DEV,
+    debug,
   });
   const { create } = useParticles();
 
-  const [intensity, setIntensity] = useState<number | undefined>(undefined);
   const spanRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
 
   const handleTrigger = (
@@ -29,7 +29,7 @@ export const Demo = () => {
     x?: number,
     y?: number,
   ) => {
-    trigger(pattern, { intensity });
+    trigger(pattern);
     if (x !== undefined && y !== undefined) {
       create(
         x,
@@ -78,23 +78,6 @@ export const Demo = () => {
             </span>
           </button>
         ))}
-      </div>
-
-      <div className={styles.intensityControl}>
-        <label htmlFor="intensity">
-          Intensity:{" "}
-          {intensity !== undefined ? `${Math.round(intensity * 100)}%` : "Auto"}
-        </label>
-        <input
-          id="intensity"
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          value={intensity}
-          onChange={(e) => setIntensity(parseFloat(e.target.value))}
-        />
-        <Button onClick={() => setIntensity(undefined)}>Reset</Button>
       </div>
     </div>
   );

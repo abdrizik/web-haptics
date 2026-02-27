@@ -24,6 +24,6 @@ haptics.trigger(defaultPatterns.success);
 <button on:click={() => trigger()}>Tap me</button>`,
 };
 
-export const populateExample = (example: string, _exampleText: string) => {
+export const populateExample = (example: string) => {
   return example;
 };

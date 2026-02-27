@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, watch } from "vue";
 import { WebHaptics } from "../lib/web-haptics";
 import type {
   HapticInput,
@@ -17,6 +17,13 @@ export function useWebHaptics(options?: WebHapticsOptions) {
     instance?.destroy();
     instance = null;
   });
+
+  watch(
+    () => options?.debug,
+    (val) => {
+      instance?.setDebug(val ?? false);
+    },
+  );
 
   const trigger = (input?: HapticInput, options?: TriggerOptions) =>
     instance?.trigger(input, options);

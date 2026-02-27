@@ -12,7 +12,8 @@ export function createWebHaptics(options?: WebHapticsOptions) {
     instance.trigger(input, options);
   const cancel = () => instance.cancel();
   const destroy = () => instance.destroy();
+  const setDebug = (debug: boolean) => instance.setDebug(debug);
   const isSupported = WebHaptics.isSupported();
 
-  return { trigger, cancel, destroy, isSupported };
+  return { trigger, cancel, destroy, setDebug, isSupported };
 }

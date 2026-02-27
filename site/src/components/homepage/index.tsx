@@ -10,6 +10,8 @@ import * as Logos from "./logos";
 import { Demo } from "./demo";
 import { Button } from "../button";
 import { useWebHaptics } from "web-haptics/react";
+import { useApp } from "../../context/app";
+import { SoundIcon } from "./sound-icon";
 
 const frameworks = [
   {
@@ -39,11 +41,22 @@ const frameworks = [
 ];
 
 export default function Home() {
+  const { debug, setDebug } = useApp();
+  const { trigger } = useWebHaptics({ debug });
+
   const [frameworkIndex, setFrameworkIndex] = useState(0);
-  const { trigger } = useWebHaptics();
 
   return (
     <div className={styles.page}>
+      <div className={styles.debug}>
+        <button
+          onClick={() => {
+            setDebug(!debug);
+          }}
+        >
+          <SoundIcon enabled={debug} />
+        </button>
+      </div>
       <div className={styles.container}>
         <div className={styles.header}>
           <svg
