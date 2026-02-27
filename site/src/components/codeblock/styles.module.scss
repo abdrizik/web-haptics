@@ -4,6 +4,8 @@
   border-radius: 0.75rem;
   corner-shape: superellipse(1.25);
   overflow: hidden;
+  box-shadow: 0 0 0 1px var(--border);
+  background-color: var(--body);
 
   .copy {
     z-index: 99;
@@ -16,7 +18,7 @@
     letter-spacing: -0.00563rem;
     transition: color 200ms ease;
     color: var(--color-muted);
-    background-color: var(--body-light);
+    background-color: var(--body);
     mask-image: linear-gradient(to right, transparent, black 1.25rem);
 
     &:hover {
@@ -28,7 +30,6 @@
     position: relative;
     padding: 1rem 1.25rem;
     color: var(--color);
-    background-color: var(--body-light);
     overflow: hidden;
     font-size: 0.8125rem;
     line-height: 1.4;

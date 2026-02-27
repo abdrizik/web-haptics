@@ -51,14 +51,23 @@
   width: 100%;
 }
 
-.toggleGroup {
-}
 .installation {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
 
-  --body-light: var(--body);
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color);
+    }
+  }
 }
 
 .header {
@@ -74,10 +83,8 @@
     display: block;
   }
 
-  h1 {
-    font-size: 1rem;
+  p {
     font-weight: 500;
-    color: var(--color);
   }
 }
 

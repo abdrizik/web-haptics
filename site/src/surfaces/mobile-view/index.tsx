@@ -68,8 +68,15 @@ export default function MobileView({
             {view === "play" && <Demo setShaking={setShaking} />}
             {view === "install" && (
               <div className={styles.installation}>
-                <InstallCommands />
-                <Usage />
+                <section>
+                  <h3>Install</h3>
+                  <InstallCommands />
+                </section>
+
+                <section>
+                  <h3>Usage</h3>
+                  <Usage />
+                </section>
               </div>
             )}
           </motion.div>

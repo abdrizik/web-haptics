@@ -72,10 +72,12 @@ export default function DesktopView() {
         </div>
 
         <section>
+          <h3>Install</h3>
           <InstallCommands />
         </section>
 
         <section>
+          <h3>Usage</h3>
           <Usage />
         </section>
 
