@@ -3,7 +3,6 @@ import styles from "./styles.module.scss";
 import { useWebHaptics } from "web-haptics/react";
 import { defaultPatterns } from "web-haptics";
 import { useState } from "react";
-import { Dropdown } from "../dropdown";
 
 export const Demo = () => {
   const { trigger } = useWebHaptics({ debug: true });
