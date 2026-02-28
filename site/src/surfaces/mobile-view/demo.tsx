@@ -68,14 +68,6 @@ export const Demo = ({
             <button
               data-pattern={name}
               aria-description={pattern.description}
-              onTouchStart={(e) =>
-                handleTrigger(
-                  name,
-                  pattern,
-                  e.touches[0].clientX,
-                  e.touches[0].clientY,
-                )
-              }
               onPointerDown={(e) => {
                 handleTrigger(name, pattern, e.clientX, e.clientY);
               }}
