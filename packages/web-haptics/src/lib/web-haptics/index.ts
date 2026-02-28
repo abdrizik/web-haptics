@@ -55,6 +55,7 @@ export class WebHaptics {
   private audioCtx: AudioContext | null = null;
   private audioFilter: BiquadFilterNode | null = null;
   private audioGain: GainNode | null = null;
+  private audioBuffer: AudioBuffer | null = null;
 
   constructor(options?: WebHapticsOptions) {
     this.instanceId = ++instanceCounter;
@@ -150,6 +151,7 @@ export class WebHaptics {
       this.audioCtx = null;
       this.audioFilter = null;
       this.audioGain = null;
+      this.audioBuffer = null;
     }
   }
 
@@ -160,6 +162,7 @@ export class WebHaptics {
       this.audioCtx = null;
       this.audioFilter = null;
       this.audioGain = null;
+      this.audioBuffer = null;
     }
   }
 
@@ -236,24 +239,14 @@ export class WebHaptics {
   }
 
   private playClick(intensity: number): void {
-    if (!this.audioCtx || !this.audioFilter || !this.audioGain) return;
-
-    const duration = 0.004;
-    const buffer = this.audioCtx.createBuffer(
-      1,
-      this.audioCtx.sampleRate * duration,
-      this.audioCtx.sampleRate,
-    );
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < data.length; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 25);
-    }
+    if (!this.audioCtx || !this.audioFilter || !this.audioGain || !this.audioBuffer) return;
 
     this.audioGain.gain.value = 0.5 * intensity;
 
     const source = this.audioCtx.createBufferSource();
-    source.buffer = buffer;
+    source.buffer = this.audioBuffer;
     source.connect(this.audioFilter);
+    source.onended = () => source.disconnect();
     source.start();
   }
 
@@ -269,6 +262,17 @@ export class WebHaptics {
       this.audioGain = this.audioCtx.createGain();
       this.audioFilter.connect(this.audioGain);
       this.audioGain.connect(this.audioCtx.destination);
+
+      const duration = 0.004;
+      this.audioBuffer = this.audioCtx.createBuffer(
+        1,
+        this.audioCtx.sampleRate * duration,
+        this.audioCtx.sampleRate,
+      );
+      const data = this.audioBuffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 25);
+      }
     }
     if (this.audioCtx?.state === "suspended") {
       await this.audioCtx.resume();
