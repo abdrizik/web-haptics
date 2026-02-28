@@ -30,9 +30,9 @@ export const Demo = ({
     y?: number,
   ) => {
     trigger(pattern);
-    if (setShaking) {
+    if (setShaking && name === "buzz") {
       setShaking(true);
-      setTimeout(() => setShaking(false), name === "buzz" ? 1000 : 300);
+      setTimeout(() => setShaking(false), 1000);
     }
     if (x !== undefined && y !== undefined) {
       create(

@@ -8,9 +8,11 @@ import { InstallCommands } from "../installation";
 import { Usage } from "../usage";
 import { useState } from "react";
 import { motion } from "motion/react";
+import { useVibration } from "../../hooks/useVibration";
 
 export default function DesktopView() {
   const [shaking, setShaking] = useState(false);
+  const phoneRef = useVibration(shaking);
 
   return (
     <div className={styles.page}>
@@ -38,7 +40,7 @@ export default function DesktopView() {
               },
             }}
           >
-            <div className={styles.phone} data-shaking={shaking}>
+            <div className={styles.phone} ref={phoneRef}>
               <div className={styles.screen}>
                 <MobileView disabled setShaking={setShaking} />
               </div>
