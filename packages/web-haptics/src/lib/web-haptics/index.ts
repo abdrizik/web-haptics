@@ -241,6 +241,11 @@ export class WebHaptics {
   private playClick(intensity: number): void {
     if (!this.audioCtx || !this.audioFilter || !this.audioGain || !this.audioBuffer) return;
 
+    const data = this.audioBuffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / 25);
+    }
+
     this.audioGain.gain.value = 0.5 * intensity;
 
     const source = this.audioCtx.createBufferSource();
