@@ -119,6 +119,14 @@ export class WebHaptics {
       }
 
       this.stopPattern();
+
+      // Fire first click synchronously to stay within user gesture context
+      // (iOS blocks haptics from programmatic clicks outside gesture handlers)
+      this.hapticLabel.click();
+      if (this.debug && this.audioCtx) {
+        this.playClick(intensity);
+      }
+
       await this.runPattern(pattern, intensity);
     }
   }
@@ -178,7 +186,7 @@ export class WebHaptics {
 
       const toggleInterval = TOGGLE_MIN + (1 - intensity) * TOGGLE_MAX;
       let startTime = 0;
-      let lastToggleTime = 0;
+      let lastToggleTime = -1; // -1 signals first click was already fired synchronously
 
       const loop = (time: number) => {
         if (startTime === 0) startTime = time;
@@ -200,7 +208,10 @@ export class WebHaptics {
         }
 
         if (phaseIndex % 2 === 0) {
-          if (time - lastToggleTime >= toggleInterval) {
+          if (lastToggleTime === -1) {
+            // Skip first toggle — already fired synchronously
+            lastToggleTime = time;
+          } else if (time - lastToggleTime >= toggleInterval) {
             this.hapticLabel?.click();
             if (this.debug && this.audioCtx) {
               this.playClick(intensity);
