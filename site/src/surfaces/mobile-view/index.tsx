@@ -92,7 +92,12 @@ export default function MobileView({
                 </div>
               )}
               {view === "build" && (
-                <div className={styles.installation}>
+                <div
+                  className={styles.installation}
+                  style={{
+                    minHeight: 300,
+                  }}
+                >
                   <section>
                     <h3>Builder</h3>
                     <HapticBuilder />

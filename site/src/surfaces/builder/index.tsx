@@ -517,7 +517,6 @@ export const HapticBuilder = () => {
       <div className={styles.header}>
         {/* Presets */}
         <div className={styles.presets}>
-          <p>Preset:</p>
           {presets.map(([name, preset]) => (
             <button
               key={name}
