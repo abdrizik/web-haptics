@@ -59,33 +59,56 @@ haptics.trigger("success");
 
 ## Built-in Presets
 
-| Name      | Pattern                | Intensity |
-| --------- | ---------------------- | --------- |
-| `success` | `[50, 50, 50]`         | 0.5       |
-| `nudge`   | `[80, 100, 200]`       | 0.5       |
-| `error`   | `[50, 50, 50, 50, 50]` | 0.75      |
-| `buzz`    | `[1000]`               | 1.0       |
+| Name      | Pattern                                                          | Description                    |
+| --------- | ---------------------------------------------------------------- | ------------------------------ |
+| `success` | `[{ duration: 50 }, { delay: 50, duration: 50 }]`               | Two taps indicating success    |
+| `nudge`   | `[{ duration: 80, intensity: 0.8 }, { delay: 80, duration: 50, intensity: 0.3 }]` | Strong tap followed by a soft tap |
+| `error`   | `[{ duration: 50, intensity: 0.75 }, ...]` ×3                   | Three sharp taps for errors    |
+| `buzz`    | `[{ duration: 1000, intensity: 1 }]`                            | A long vibration               |
 
 You can also pass custom patterns directly:
 
 ```ts
-trigger([100, 50, 100]); // custom pattern
-trigger(200); // single vibration
-trigger({ pattern: [50, 50, 50], description: "custom", intensity: 0.8 }); // full preset
+trigger([100, 50, 100]); // number[] shorthand (alternating on/off durations)
+trigger(200); // single vibration (ms)
+trigger([{ duration: 80, intensity: 0.8 }, { delay: 50, duration: 100 }]); // Vibration[]
+trigger({
+  pattern: [{ duration: 50 }, { delay: 50, duration: 50 }],
+  description: "custom",
+}); // full HapticPreset
 ```
 
 ## API
 
-### `trigger(input?, options?)`
+### `new WebHaptics(options?)`
+
+Create a new instance.
+
+- `options.debug` — enable audio feedback for testing on desktop (default `false`)
+- `options.showSwitch` — show the haptic feedback toggle switch (default `false`)
+
+### `trigger(input?, options?): Promise<void>`
 
 Trigger haptic feedback.
 
-- `input` — preset name (`"success"`), number, `number[]`, or `HapticPreset`
-- `options.intensity` — override intensity (0–1)
+- `input` — preset name (`"success"`), duration in ms, `number[]`, `Vibration[]`, or `HapticPreset`
+- `options.intensity` — override default intensity (0–1, default `0.5`)
 
 ### `cancel()`
 
 Stop the current pattern and cancel any ongoing vibration.
+
+### `destroy()`
+
+Clean up DOM elements and audio resources. Call when the instance is no longer needed.
+
+### `setDebug(debug: boolean)`
+
+Enable or disable debug audio feedback.
+
+### `setShowSwitch(show: boolean)`
+
+Show or hide the haptic feedback toggle switch.
 
 ### `WebHaptics.isSupported`
 
