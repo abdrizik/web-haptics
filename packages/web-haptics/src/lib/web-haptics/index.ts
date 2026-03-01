@@ -201,17 +201,23 @@ export class WebHaptics {
 
       this.stopPattern();
 
+      const firstDelay = vibrations[0]?.delay ?? 0;
+      const firstClickFired = firstDelay === 0;
+
       // Fire first click synchronously to stay within user gesture context
-      this.hapticLabel.click();
-      if (this.debug && this.audioCtx) {
-        const firstIntensity = Math.max(
-          0,
-          Math.min(1, vibrations[0]!.intensity ?? defaultIntensity),
-        );
-        this.playClick(firstIntensity);
+      // (only when the first vibration has no delay)
+      if (firstClickFired) {
+        this.hapticLabel.click();
+        if (this.debug && this.audioCtx) {
+          const firstIntensity = Math.max(
+            0,
+            Math.min(1, vibrations[0]!.intensity ?? defaultIntensity),
+          );
+          this.playClick(firstIntensity);
+        }
       }
 
-      await this.runPattern(vibrations, defaultIntensity);
+      await this.runPattern(vibrations, defaultIntensity, firstClickFired);
     }
   }
 
@@ -270,6 +276,7 @@ export class WebHaptics {
   private runPattern(
     vibrations: Vibration[],
     defaultIntensity: number,
+    firstClickFired: boolean,
   ): Promise<void> {
     return new Promise((resolve) => {
       this.patternResolve = resolve;
@@ -321,6 +328,13 @@ export class WebHaptics {
 
           if (lastToggleTime === -1) {
             lastToggleTime = time;
+            if (!firstClickFired) {
+              this.hapticLabel?.click();
+              if (this.debug && this.audioCtx) {
+                this.playClick(phase.intensity);
+              }
+              firstClickFired = true;
+            }
           } else if (time - lastToggleTime >= toggleInterval) {
             this.hapticLabel?.click();
             if (this.debug && this.audioCtx) {
