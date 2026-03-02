@@ -189,14 +189,14 @@
   }
 
   &[data-playing="true"]:after {
-    inset: -3px -1px;
+    inset: 0px -1px;
     transition-duration: 400ms;
   }
 
   &:after {
     content: "";
     position: absolute;
-    inset: 1px;
+    inset: 3px 1px;
     background: rgba(26, 136, 248, 0.2);
     border-radius: 0.5rem;
 
@@ -383,6 +383,7 @@
     svg {
       display: block;
       height: auto;
+      transform: translateX(1px);
     }
     &:hover {
       transform: scale(1.1);
